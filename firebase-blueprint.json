@@ -1,0 +1,975 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile including administrative privileges and community rating statistics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the user" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "village": { "type": "string" },
+        "skills": { "type": "array" },
+        "thanksCount": { "type": "integer" },
+        "createdCount": { "type": "integer" },
+        "resolvedCount": { "type": "integer" },
+        "blocked": { "type": "boolean" },
+        "reportsCount": { "type": "integer" },
+        "role": { "type": "string", "enum": ["main_admin", "village_admin", "user"] },
+        "adminVillage": { "type": "string" },
+        "age": { "type": "integer" },
+        "whoInstalled": { "type": "string" },
+        "primaryGoal": { "type": "string" },
+        "isSimplifiedMode": { "type": "boolean" },
+        "referrals": {
+          "type": "object",
+          "properties": {
+            "code": { "type": "string" },
+            "referredBy": { "type": "string" },
+            "total": { "type": "integer" },
+            "totalEarnedPoints": { "type": "integer" },
+            "history": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "userId": { "type": "string" },
+                  "userName": { "type": "string" },
+                  "userRole": { "type": "string" },
+                  "pointsEarned": { "type": "integer" },
+                  "date": { "type": "string" },
+                  "upgrades": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "tariff": { "type": "string" },
+                        "pointsEarned": { "type": "integer" },
+                        "date": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "digitalLiteracy": {
+          "type": "object",
+          "properties": {
+            "completed_lessons": { "type": "array", "items": { "type": "integer" } },
+            "total_reward": { "type": "integer" },
+            "started_at": { "type": "string", "format": "date-time" },
+            "completed_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "required": ["id", "name", "phone", "village", "skills", "thanksCount", "createdCount", "resolvedCount", "blocked", "reportsCount"]
+    },
+    "HelpRequest": {
+      "title": "HelpRequest",
+      "description": "Mutual aid post created by a community member",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "photos": { "type": "array" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhone": { "type": "string" },
+        "authorRating": { "type": "integer" },
+        "village": { "type": "string" },
+        "locationDetails": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "active": { "type": "boolean" },
+        "reportsCount": { "type": "integer" }
+      },
+      "required": ["id", "title", "category", "description", "photos", "authorId", "authorName", "authorPhone", "authorRating", "village", "createdAt", "active", "reportsCount"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "Private direct conversation thread regarding a help request",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "postTitle": { "type": "string" },
+        "postCategory": { "type": "string" },
+        "authorId": { "type": "string" },
+        "responderId": { "type": "string" },
+        "lastMessageText": { "type": "string" },
+        "lastMessageTime": { "type": "string", "format": "date-time" },
+        "unreadCountAuthor": { "type": "integer" },
+        "unreadCountResponder": { "type": "integer" },
+        "resolved": { "type": "boolean" },
+        "ratingGivenByAuthor": { "type": "boolean" },
+        "ratingGivenByResponder": { "type": "boolean" }
+      },
+      "required": ["id", "postId", "postTitle", "postCategory", "authorId", "responderId", "lastMessageText", "lastMessageTime", "unreadCountAuthor", "unreadCountResponder", "resolved", "ratingGivenByAuthor", "ratingGivenByResponder"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Single message sent within a chat session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "photo": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "chatId", "senderId", "senderName", "text", "createdAt"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "Moderation complaint reported against abusive posts or users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["post", "user"] },
+        "reporterId": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "reason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "resolved": { "type": "boolean" }
+      },
+      "required": ["id", "targetId", "targetType", "reporterId", "reporterName", "reason", "createdAt", "resolved"]
+    },
+    "Entrepreneur": {
+      "title": "Entrepreneur",
+      "description": "Local entrepreneur delivering groceries",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "businessName": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "serviceRadius": { "type": "integer" },
+        "deliverySchedule": { "type": "object" },
+        "priceList": { "type": "array" },
+        "rating": { "type": "object" },
+        "isVerified": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "moderationStatus": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "coverUrl": { "type": "string" },
+        "themeColor": { "type": "string" },
+        "address": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "businessName", "contactPhone", "serviceRadius", "deliverySchedule", "priceList", "rating", "isVerified", "isActive", "moderationStatus", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Grocery delivery order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "entrepreneurId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userVillage": { "type": "string" },
+        "deliveryAddress": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "deliveryFee": { "type": "number" },
+        "status": { "type": "string", "enum": ["new", "accepted", "delivering", "delivered", "cancelled"] },
+        "preferredDeliveryDate": { "type": "string" },
+        "actualDeliveryDate": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "reviewId": { "type": "string" }
+      },
+      "required": ["id", "entrepreneurId", "userId", "userVillage", "deliveryAddress", "items", "totalAmount", "deliveryFee", "status", "preferredDeliveryDate", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Feedback on grocery delivery",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "entrepreneurId": { "type": "string" },
+        "userId": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "categories": { "type": "object" },
+        "isAnonymous": { "type": "boolean" },
+        "photos": { "type": "array" },
+        "entrepreneurReply": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orderId", "entrepreneurId", "userId", "rating", "comment", "categories", "isAnonymous", "photos", "createdAt"]
+    },
+    "BusRoute": {
+      "title": "BusRoute",
+      "description": "Bus routes and schedule details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "departureVillage": { "type": "string" },
+        "arrivalVillage": { "type": "string" },
+        "schedule": { "type": "object" },
+        "isActive": { "type": "boolean" },
+        "routeNumber": { "type": "string" },
+        "price": { "type": "number" },
+        "provider": { "type": "string" }
+      },
+      "required": ["id", "departureVillage", "arrivalVillage", "schedule", "isActive", "routeNumber", "price", "provider"]
+    },
+    "RideOffer": {
+      "title": "RideOffer",
+      "description": "Offer to give someone a ride in Ustyany district",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userAvatar": { "type": "string" },
+        "departureVillage": { "type": "string" },
+        "arrivalVillage": { "type": "string" },
+        "departureDate": { "type": "string" },
+        "departureTime": { "type": "string" },
+        "availableSeats": { "type": "integer" },
+        "price": { "type": "number" },
+        "comment": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "completed", "cancelled"] },
+        "passengers": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "departureVillage", "arrivalVillage", "departureDate", "departureTime", "availableSeats", "price", "comment", "contactPhone", "status", "passengers", "createdAt"]
+    },
+    "RideRequest": {
+      "title": "RideRequest",
+      "description": "Request for a ride in Ustyany district",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userAvatar": { "type": "string" },
+        "departureVillage": { "type": "string" },
+        "arrivalVillage": { "type": "string" },
+        "departureDate": { "type": "string" },
+        "passengers": { "type": "integer" },
+        "comment": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "matched", "completed", "cancelled"] },
+        "matchedOfferId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "departureVillage", "arrivalVillage", "departureDate", "passengers", "comment", "contactPhone", "status", "matchedOfferId", "createdAt"]
+    },
+    "RoadReport": {
+      "title": "RoadReport",
+      "description": "Report on road conditions and segments in Ustyany",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "segmentStart": { "type": "string" },
+        "segmentEnd": { "type": "string" },
+        "condition": { "type": "string", "enum": ["good", "fair", "poor", "impassable"] },
+        "comment": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "segmentStart", "segmentEnd", "condition", "comment", "createdAt"]
+    },
+    "RideReview": {
+      "title": "RideReview",
+      "description": "Review of a ride offer / driver performance",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "rideOfferId": { "type": "string" },
+        "reviewerUserId": { "type": "string" },
+        "reviewerName": { "type": "string" },
+        "targetUserId": { "type": "string" },
+        "rating": { "type": "number" },
+        "categories": { "type": "object" },
+        "comment": { "type": "string" },
+        "isAnonymous": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "rideOfferId", "reviewerUserId", "targetUserId", "rating", "categories", "comment", "isAnonymous", "createdAt"]
+    },
+    "Dispute": {
+      "title": "Dispute",
+      "description": "Dispute opened by a customer regarding a delivered order",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerPhone": { "type": "string" },
+        "entrepreneurId": { "type": "string" },
+        "entrepreneurBusinessName": { "type": "string" },
+        "reason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["open", "resolved_refund", "resolved_no_refund", "resolved_fine"] },
+        "resolutionComment": { "type": "string" }
+      },
+      "required": ["id", "orderId", "buyerId", "buyerName", "entrepreneurId", "entrepreneurBusinessName", "reason", "createdAt", "status"]
+    },
+    "FraudAlert": {
+      "title": "FraudAlert",
+      "description": "Fraud activity or IP address match alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "ipAddress": { "type": "string" },
+        "reason": { "type": "string" },
+        "severity": { "type": "string", "enum": ["warning", "block"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "ipAddress", "reason", "severity", "createdAt"]
+    },
+    "Master": {
+      "title": "Master",
+      "description": "Skill catalog master profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "userVillage": { "type": "string" },
+        "userAvatar": { "type": "string" },
+        "categories": { "type": "array" },
+        "description": { "type": "string" },
+        "experience": { "type": "string" },
+        "education": { "type": "string" },
+        "priceFrom": { "type": "number" },
+        "priceDescription": { "type": "string" },
+        "workingHours": { "type": "string" },
+        "rating": { "type": "object" },
+        "statistics": { "type": "object" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "categories", "description", "experience", "priceFrom", "isActive", "createdAt", "updatedAt"]
+    },
+    "PortfolioItem": {
+      "title": "PortfolioItem",
+      "description": "A showcase item in master portfolio",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "masterId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "photos": { "type": "array" },
+        "location": { "type": "string" },
+        "price": { "type": "number" },
+        "date": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "masterId", "title", "description", "photos", "location", "date", "createdAt"]
+    },
+    "ServiceOrder": {
+      "title": "ServiceOrder",
+      "description": "Direct order or request for master service",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "masterId": { "type": "string" },
+        "masterName": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "clientPhone": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "address": { "type": "string" },
+        "budget": { "type": "number" },
+        "preferredDate": { "type": "string" },
+        "photos": { "type": "array" },
+        "status": { "type": "string", "enum": ["new", "accepted", "in_progress", "completed", "cancelled"] },
+        "commission": { "type": "number" },
+        "commissionPaid": { "type": "boolean" },
+        "reviewId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "masterId", "clientId", "description", "category", "address", "preferredDate", "status", "commission", "commissionPaid", "createdAt"]
+    },
+    "MasterReview": {
+      "title": "MasterReview",
+      "description": "Customer feedback on master completed service",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "masterId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "rating": { "type": "number" },
+        "categories": { "type": "object" },
+        "comment": { "type": "string" },
+        "photos": { "type": "array" },
+        "isAnonymous": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orderId", "masterId", "clientId", "rating", "categories", "comment", "isAnonymous", "createdAt"]
+    },
+    "Page": {
+      "title": "Page",
+      "description": "Page definition created in Page Builder",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "path": { "type": "string" },
+        "order": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "isHome": { "type": "boolean" },
+        "settings": { "type": "object" },
+        "widgets": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "version": { "type": "integer" }
+      },
+      "required": ["id", "title", "path", "order", "isActive", "widgets", "createdAt", "updatedAt"]
+    },
+    "PageTemplate": {
+      "title": "PageTemplate",
+      "description": "Pre-made page templates for quick creation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "previewImage": { "type": "string" },
+        "widgets": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "description", "widgets", "createdAt"]
+    },
+    "PageHistory": {
+      "title": "PageHistory",
+      "description": "Historical versions of edited pages for rollbacks",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "pageId": { "type": "string" },
+        "version": { "type": "integer" },
+        "widgets": { "type": "array" },
+        "settings": { "type": "object" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["id", "pageId", "version", "widgets", "createdAt", "createdBy"]
+    },
+    "EcoPoint": {
+      "title": "EcoPoint",
+      "description": "Information on eco-waste collection points",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "village": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "phone": { "type": "string" },
+        "schedule": { "type": "string" },
+        "accepts": { "type": "array" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "address", "village", "lat", "lng", "accepts", "isActive"]
+    },
+    "EcoReport": {
+      "title": "EcoReport",
+      "description": "User reported environmental issues or dumps",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "village": { "type": "string" },
+        "description": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "photos": { "type": "array" },
+        "isAnonymous": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["new", "in_progress", "resolved", "rejected"] },
+        "assignedTo": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "village", "description", "lat", "lng", "isAnonymous", "status", "createdAt"]
+    },
+    "EcoEvent": {
+      "title": "EcoEvent",
+      "description": "Environmental cleanup volunteer events",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "village": { "type": "string" },
+        "address": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "organizer": { "type": "string" },
+        "participants": { "type": "integer" },
+        "maxParticipants": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "photos": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" },
+        "participantUserIds": { "type": "array" }
+      },
+      "required": ["id", "title", "description", "village", "address", "date", "time", "organizer", "participants", "maxParticipants", "isActive", "createdAt", "createdBy"]
+    },
+    "EcoStats": {
+      "title": "EcoStats",
+      "description": "Aggregated eco cleanup and collection metrics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "totalBatteriesCollected": { "type": "integer" },
+        "totalEvents": { "type": "integer" },
+        "totalParticipants": { "type": "integer" },
+        "totalDumpsCleared": { "type": "integer" },
+        "byVillage": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "totalBatteriesCollected", "totalEvents", "totalParticipants", "totalDumpsCleared", "updatedAt"]
+    },
+    "ProjectStats": {
+      "title": "ProjectStats",
+      "description": "Aggregated stats for the whole district and project in real-time",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "totalUsers": { "type": "integer" },
+        "activeUsers": { "type": "integer" },
+        "totalHelpRequests": { "type": "integer" },
+        "totalHelpProvided": { "type": "integer" },
+        "totalMasters": { "type": "integer" },
+        "totalEntrepreneurs": { "type": "integer" },
+        "totalChildren": { "type": "integer" },
+        "totalElderly": { "type": "integer" },
+        "totalReviews": { "type": "integer" },
+        "totalEcoEvents": { "type": "integer" },
+        "totalDeliveries": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "totalUsers", "activeUsers", "totalHelpRequests", "totalHelpProvided", "totalMasters", "totalEntrepreneurs", "totalChildren", "totalElderly", "totalReviews", "totalEcoEvents", "totalDeliveries", "updatedAt"]
+    },
+    "ProjectReview": {
+      "title": "ProjectReview",
+      "description": "Reviews left by residents about the Ustyany Mutual Aid app",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userVillage": { "type": "string" },
+        "rating": { "type": "integer" },
+        "text": { "type": "string" },
+        "isPublic": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "userName", "userVillage", "rating", "text", "isPublic", "createdAt"]
+    },
+    "ScalingRequest": {
+      "title": "ScalingRequest",
+      "description": "A request to launch the Ustyany Mutual Aid platform in another district",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "districtName": { "type": "string" },
+        "contactName": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "comments": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "districtName", "contactName", "contactPhone", "createdAt"]
+    },
+    "Partner": {
+      "title": "Partner",
+      "description": "Franchising partner representing a district",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "districtName": { "type": "string" },
+        "contactName": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "selectedPackage": { "type": "string", "enum": ["start", "business", "partner"] },
+        "royaltyModel": { "type": "string", "enum": ["fixed", "percent"] },
+        "royaltyPercentage": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "signedAgreement": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "comments": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "districtName", "contactName", "contactPhone", "selectedPackage", "royaltyModel", "royaltyPercentage", "status", "signedAgreement", "createdAt"]
+    },
+    "License": {
+      "title": "License",
+      "description": "Franchising license definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "partnerId": { "type": "string" },
+        "districtName": { "type": "string" },
+        "licenseType": { "type": "string", "enum": ["start", "business", "partner"] },
+        "validFrom": { "type": "string", "format": "date-time" },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "isActive": { "type": "boolean" },
+        "paymentStatus": { "type": "string", "enum": ["pending", "paid"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "partnerId", "districtName", "licenseType", "validFrom", "validUntil", "isActive", "paymentStatus", "createdAt"]
+    },
+    "Contract": {
+      "title": "Contract",
+      "description": "Legally significant contract signed on the platform",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "type": { "type": "string", "enum": ["offer", "license", "entrepreneur"] },
+        "status": { "type": "string", "enum": ["signed", "unsigned", "terminated"] },
+        "signedAt": { "type": "string", "format": "date-time" },
+        "content": { "type": "string" },
+        "explanations": { "type": "object" },
+        "ipAddress": { "type": "string" }
+      },
+      "required": ["id", "userId", "userName", "type", "status", "signedAt", "content"]
+    },
+    "FranchiseLead": {
+      "title": "FranchiseLead",
+      "description": "Lead generated by prospective regional scaling partner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orgName": { "type": "string" },
+        "regionName": { "type": "string" },
+        "contactName": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "selectedPackage": { "type": "string", "enum": ["local", "regional", "partner"] },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orgName", "regionName", "contactName", "contactPhone", "contactEmail", "selectedPackage", "createdAt"]
+    },
+    "GoodNews": {
+      "title": "GoodNews",
+      "description": "Interactive kind news feed item generated by characters or moderated residents",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "author": { "type": "string", "enum": ["dobrynya", "alisa", "misha", "zoia", "sofia", "petia", "resident"] },
+        "authorName": { "type": "string" },
+        "authorAvatar": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string", "enum": ["news", "tip", "story", "announcement"] },
+        "likes": { "type": "integer" },
+        "likedBy": { "type": "array" },
+        "comments": { "type": "array" },
+        "isPublished": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "author", "authorName", "authorAvatar", "title", "content", "category", "likes", "comments", "isPublished", "createdAt"]
+    },
+    "PersonaChat": {
+      "title": "PersonaChat",
+      "description": "Interactive private conversation thread with a cartoon helper persona",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "persona": { "type": "string", "enum": ["dobrynya", "alisa", "misha", "zoia", "sofia", "petia"] },
+        "messages": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "persona", "messages", "createdAt"]
+    },
+    "Place": {
+      "title": "Place",
+      "description": "Historical, cultural or natural landmark in Ustyany district",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["historical", "architecture", "nature", "culture", "education", "craft", "religious", "recreation", "memorial", "ecotrail"] },
+        "description": { "type": "string" },
+        "history": { "type": "string" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "village": { "type": "string" },
+            "address": { "type": "string" },
+            "lat": { "type": "number" },
+            "lng": { "type": "number" }
+          }
+        },
+        "images": { "type": "array" },
+        "opens": { "type": "string" },
+        "contacts": {
+          "type": "object",
+          "properties": {
+            "phone": { "type": "string" },
+            "website": { "type": "string" },
+            "schedule": { "type": "string" }
+          }
+        },
+        "rating": {
+          "type": "object",
+          "properties": {
+            "average": { "type": "number" },
+            "total": { "type": "integer" }
+          }
+        },
+        "is_verified": { "type": "boolean" },
+        "suggested_by": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "category", "description", "location", "images", "rating", "is_verified"]
+    },
+    "PlaceReview": {
+      "title": "PlaceReview",
+      "description": "User review of a historical or cultural landmark",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "placeId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "placeId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Product sold by an entrepreneur in their marketplace storefront",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "entrepreneurId": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "unit": { "type": "string" },
+        "stock": { "type": "integer" },
+        "photoUrl": { "type": "string" },
+        "photos": { "type": "array" },
+        "discount": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "entrepreneurId", "name", "price", "category", "unit", "stock", "photoUrl", "isActive", "createdAt"]
+    },
+    "Region": {
+      "title": "Region",
+      "description": "Package-based module gating configuration for regions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "packages": { "type": "array", "items": { "type": "string" } },
+        "modules": {
+          "type": "object",
+          "properties": {
+            "help": { "type": "boolean" },
+            "chat": { "type": "boolean" },
+            "masters": { "type": "boolean" },
+            "rating": { "type": "boolean" },
+            "news": { "type": "boolean" },
+            "products": { "type": "boolean" },
+            "transport": { "type": "boolean" },
+            "ecology": { "type": "boolean" },
+            "government": { "type": "boolean" },
+            "sos": { "type": "boolean" },
+            "analytics": { "type": "boolean" }
+          },
+          "required": ["help", "chat", "masters", "rating", "news", "products", "transport", "ecology", "government", "sos"]
+        }
+      },
+      "required": ["id", "name", "packages", "modules"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Products available in the entrepreneur marketplace stores"
+    },
+    "/pages/{pageId}": {
+      "schema": "Page",
+      "description": "Page specifications for custom-built app screens"
+    },
+    "/page_templates/{templateId}": {
+      "schema": "PageTemplate",
+      "description": "Pre-defined structure patterns for new page creation"
+    },
+    "/page_history/{historyId}": {
+      "schema": "PageHistory",
+      "description": "Change history and backup versions for pages"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles including ratings and modes"
+    },
+    "/requests/{requestId}": {
+      "schema": "HelpRequest",
+      "description": "Mutual aid requests"
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Private direct conversation rooms"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Individual messages inside a chat"
+    },
+    "/complaints/{complaintId}": {
+      "schema": "Complaint",
+      "description": "Reports and complaints logged by users"
+    },
+    "/entrepreneurs/{entrepreneurId}": {
+      "schema": "Entrepreneur",
+      "description": "Grocery supplier details and price list"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Product delivery orders"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Supplier reviews from clients"
+    },
+    "/routes/{routeId}": {
+      "schema": "BusRoute",
+      "description": "Bus routes and weekly schedules"
+    },
+    "/ride_offers/{offerId}": {
+      "schema": "RideOffer",
+      "description": "Offers by drivers for shared rides"
+    },
+    "/ride_requests/{requestId}": {
+      "schema": "RideRequest",
+      "description": "Requests by passengers for shared rides"
+    },
+    "/road_reports/{reportId}": {
+      "schema": "RoadReport",
+      "description": "Crowdsourced road condition reports"
+    },
+    "/ride_reviews/{reviewId}": {
+      "schema": "RideReview",
+      "description": "Passenger feedback on driver shared rides"
+    },
+    "/disputes/{disputeId}": {
+      "schema": "Dispute",
+      "description": "Dispute tickets filed by users"
+    },
+    "/fraud_alerts/{alertId}": {
+      "schema": "FraudAlert",
+      "description": "Logs of flagged or auto-blocked activities"
+    },
+    "/masters/{masterId}": {
+      "schema": "Master",
+      "description": "Master registrations and pricing"
+    },
+    "/portfolio_items/{itemId}": {
+      "schema": "PortfolioItem",
+      "description": "Photos and details of master completed works"
+    },
+    "/service_orders/{orderId}": {
+      "schema": "ServiceOrder",
+      "description": "Orders made to masters for services"
+    },
+    "/master_reviews/{reviewId}": {
+      "schema": "MasterReview",
+      "description": "Reviews left on master services"
+    },
+    "/eco_points/{pointId}": {
+      "schema": "EcoPoint",
+      "description": "Information on eco-waste collection points"
+    },
+    "/eco_reports/{reportId}": {
+      "schema": "EcoReport",
+      "description": "User reported environmental issues or dumps"
+    },
+    "/eco_events/{eventId}": {
+      "schema": "EcoEvent",
+      "description": "Environmental cleanup volunteer events"
+    },
+    "/eco_stats/{statsId}": {
+      "schema": "EcoStats",
+      "description": "Aggregated eco cleanup and collection metrics"
+    },
+    "/project_stats/{statsId}": {
+      "schema": "ProjectStats",
+      "description": "Ustyany district project real-time metrics"
+    },
+    "/project_reviews/{reviewId}": {
+      "schema": "ProjectReview",
+      "description": "Reviews and ratings of the Ustyany Mutual Aid app"
+    },
+    "/scaling_requests/{requestId}": {
+      "schema": "ScalingRequest",
+      "description": "Requests from other districts to use the platform"
+    },
+    "/partners/{partnerId}": {
+      "schema": "Partner",
+      "description": "Franchising partners for regional scaling"
+    },
+    "/licenses/{licenseId}": {
+      "schema": "License",
+      "description": "Licenses granted to franchising partners"
+    },
+    "/contracts/{contractId}": {
+      "schema": "Contract",
+      "description": "Legally significant contracts signed by community members and partners"
+    },
+    "/franchise_leads/{leadId}": {
+      "schema": "FranchiseLead",
+      "description": "Franchise lead submissions by prospective partners"
+    },
+    "/good_news/{newsId}": {
+      "schema": "GoodNews",
+      "description": "Kind community stories and character updates"
+    },
+    "/persona_chats/{chatId}": {
+      "schema": "PersonaChat",
+      "description": "Interactive chats between residents and cartoon helper personas"
+    },
+    "/places/{placeId}": {
+      "schema": "Place",
+      "description": "Historical, cultural and natural landmark records of Ustyany district"
+    },
+    "/place_reviews/{reviewId}": {
+      "schema": "PlaceReview",
+      "description": "Reviews and ratings left by residents on landmark records"
+    },
+    "/regions/{regionId}": {
+      "schema": "Region",
+      "description": "Region configuration for feature flags and packages"
+    }
+  }
+}

@@ -1,0 +1,488 @@
+@import "tailwindcss";
+
+:root {
+  --grid-cols-mobile: repeat(1, minmax(0, 1fr));
+  --grid-cols-tablet: repeat(2, minmax(0, 1fr));
+  --grid-cols-desktop-3: repeat(3, minmax(0, 1fr));
+  --grid-cols-desktop-4: repeat(4, minmax(0, 1fr));
+}
+
+.grid-adaptive-cols {
+  display: grid;
+  grid-template-columns: var(--grid-cols-mobile);
+}
+
+@media (min-width: 768px) {
+  .grid-adaptive-cols {
+    grid-template-columns: var(--grid-cols-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-adaptive-cols {
+    grid-template-columns: var(--grid-cols-desktop-3);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-adaptive-cols {
+    grid-template-columns: var(--grid-cols-desktop-4);
+  }
+}
+
+@theme {
+  --font-sans: var(--font-family, "Inter", ui-sans-serif, system-ui, sans-serif);
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-brand-dark: var(--color-primary, var(--brand-dark, #1B4332));
+  --color-brand-medium: var(--color-secondary, var(--brand-medium, #40916C));
+  --color-brand-light: var(--color-card, var(--brand-light, #D8F3DC));
+  --color-brand-bg: var(--color-background, var(--brand-bg, #F8FAF9));
+  --color-brand-accent: var(--color-secondary, var(--brand-accent, #0077B6));
+  --color-slate-bg: var(--color-background, var(--brand-bg, #F1F5F9));
+  
+  --animate-fadeIn: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slideIn: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scoped overrides when customizer theme is active */
+.theme-classic, .theme-village, .theme-child, .theme-dark, .theme-minimal, .theme-eco, .theme-vip, .theme-elderly {
+  font-family: var(--font-family, "Inter", sans-serif) !important;
+  font-size: var(--font-size-base, 14px) !important;
+}
+
+.theme-classic button, .theme-classic input, .theme-classic select, .theme-classic textarea,
+.theme-village button, .theme-village input, .theme-village select, .theme-village textarea,
+.theme-child button, .theme-child input, .theme-child select, .theme-child textarea,
+.theme-dark button, .theme-dark input, .theme-dark select, .theme-dark textarea,
+.theme-minimal button, .theme-minimal input, .theme-minimal select, .theme-minimal textarea,
+.theme-eco button, .theme-eco input, .theme-eco select, .theme-eco textarea,
+.theme-vip button, .theme-vip input, .theme-vip select, .theme-vip textarea,
+.theme-elderly button, .theme-elderly input, .theme-elderly select, .theme-elderly textarea {
+  border-radius: var(--border-radius, 4px) !important;
+}
+
+.theme-classic .bg-white,
+.theme-village .bg-white,
+.theme-child .bg-white,
+.theme-dark .bg-white,
+.theme-minimal .bg-white,
+.theme-eco .bg-white,
+.theme-vip .bg-white,
+.theme-elderly .bg-white {
+  border-radius: var(--border-radius, 4px) !important;
+  box-shadow: var(--shadow-size, 0 1px 3px rgba(0,0,0,0.1)) !important;
+  background-color: var(--color-card, #FFFFFF) !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes drawerSlideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom scrollbar helpers */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+/* ====================================================================
+   1. ELDERLY THEME OVERRIDES (Заботливый Мир - Пожилые)
+   ==================================================================== */
+.theme-elderly {
+  font-size: 1.05rem;
+}
+
+.theme-elderly .text-xs { font-size: 0.85rem; }
+.theme-elderly .text-sm { font-size: 0.95rem; }
+.theme-elderly .text-base { font-size: 1.08rem; }
+.theme-elderly .text-lg { font-size: 1.2rem; }
+.theme-elderly .text-xl { font-size: 1.4rem; }
+
+/* Gentle readability improvements for elderly users */
+.theme-elderly button,
+.theme-elderly select,
+.theme-elderly input {
+  font-weight: 600;
+}
+
+.theme-elderly .bg-white {
+  background-color: #FAF6F0 !important;
+  border: 1px solid #E8DFD5 !important;
+}
+
+.theme-elderly .text-slate-500,
+.theme-elderly .text-slate-600,
+.theme-elderly .text-gray-500 {
+  color: #3A5F43 !important;
+}
+
+/* ====================================================================
+   2. CHILD THEME OVERRIDES (Игровой Городок - Дети)
+   ==================================================================== */
+.theme-child .rounded-lg,
+.theme-child .rounded-xl,
+.theme-child .rounded-2xl,
+.theme-child .rounded-3xl,
+.theme-child .bg-white {
+  border-radius: 1.25rem !important;
+}
+
+.theme-child button,
+.theme-child input,
+.theme-child select {
+  border-radius: 9999px !important;
+}
+
+/* ====================================================================
+   3. VIP PREMIUM THEME OVERRIDES (Золотая Симфония - VIP)
+   ==================================================================== */
+.theme-vip {
+  background-color: #070706 !important;
+  color: #FFFFFF !important;
+}
+
+.theme-vip #app_root_wrapper,
+.theme-vip .bg-slate-bg {
+  background: #070706 !important;
+}
+
+/* Elegant header accentuation under VIP theme - rich 24k gold line */
+.theme-vip header {
+  background-color: #0F0F0E !important;
+  border-bottom: 2px solid #D4AF37 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Unified bottom tab bar under VIP theme */
+.theme-vip nav {
+  background-color: #0F0F0E !important;
+  border-top: 1px solid rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Inactive nav buttons in VIP theme - warm brass gold */
+.theme-vip nav button {
+  color: #A38A5F !important;
+}
+
+.theme-vip nav button svg {
+  stroke: #A38A5F !important;
+}
+
+/* Active/selected nav buttons in VIP theme - radiant pure gold */
+.theme-vip nav button.text-brand-medium,
+.theme-vip nav button.text-purple-600,
+.theme-vip nav button.text-orange-600,
+.theme-vip nav button.text-rose-600,
+.theme-vip nav button.text-indigo-600,
+.theme-vip nav button.scale-105 {
+  color: #FCD34D !important;
+  font-weight: 800 !important;
+}
+
+.theme-vip nav button.text-brand-medium svg,
+.theme-vip nav button.text-purple-600 svg,
+.theme-vip nav button.text-orange-600 svg,
+.theme-vip nav button.text-rose-600 svg,
+.theme-vip nav button.text-indigo-600 svg,
+.theme-vip nav button.scale-105 svg {
+  stroke: #F59E0B !important;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6)) !important;
+}
+
+/* Overrule ALL light-colored and brand container backgrounds to deep luxurious obsidian with gold border */
+.theme-vip .bg-white,
+.theme-vip .bg-slate-50,
+.theme-vip .bg-slate-100,
+.theme-vip .bg-slate-200,
+.theme-vip .bg-gray-50,
+.theme-vip .bg-gray-100,
+.theme-vip .bg-gray-200,
+.theme-vip .bg-zinc-50,
+.theme-vip .bg-zinc-100,
+.theme-vip .bg-zinc-200,
+.theme-vip .bg-neutral-50,
+.theme-vip .bg-neutral-100,
+.theme-vip .bg-neutral-200,
+.theme-vip .bg-stone-50,
+.theme-vip .bg-stone-100,
+.theme-vip .bg-stone-200,
+.theme-vip .bg-amber-50,
+.theme-vip .bg-amber-100,
+.theme-vip .bg-amber-200,
+.theme-vip .bg-orange-50,
+.theme-vip .bg-orange-100,
+.theme-vip .bg-orange-200,
+.theme-vip .bg-emerald-50,
+.theme-vip .bg-emerald-100,
+.theme-vip .bg-emerald-200,
+.theme-vip .bg-green-50,
+.theme-vip .bg-green-100,
+.theme-vip .bg-green-200,
+.theme-vip .bg-yellow-50,
+.theme-vip .bg-yellow-100,
+.theme-vip .bg-yellow-200,
+.theme-vip .bg-sky-50,
+.theme-vip .bg-sky-100,
+.theme-vip .bg-blue-50,
+.theme-vip .bg-blue-100,
+.theme-vip .bg-brand-light,
+.theme-vip .bg-brand-bg,
+.theme-vip .bg-brand-accent,
+.theme-vip [class*="bg-white/"],
+.theme-vip [class*="bg-slate-50/"],
+.theme-vip [class*="bg-amber-50/"],
+.theme-vip [class*="bg-orange-50/"] {
+  background-color: #141412 !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+  color: #F5F5F4 !important;
+}
+
+/* Overrule hover effects of white cards to premium radiant gold */
+.theme-vip .bg-white:hover {
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15) !important;
+}
+
+/* Darken any light gradients into premium subtle golden-dark gradients */
+.theme-vip .bg-gradient-to-r,
+.theme-vip .bg-gradient-to-br,
+.theme-vip .bg-gradient-to-t,
+.theme-vip .bg-gradient-to-b,
+.theme-vip .bg-linear-to-r,
+.theme-vip .bg-linear-to-br,
+.theme-vip .bg-linear-to-t,
+.theme-vip .bg-linear-to-b {
+  background: linear-gradient(135deg, #1A1A18 0%, #0D0D0C 100%) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
+}
+
+/* Force crystal-clear readability for ALL headers and texts */
+.theme-vip .text-black,
+.theme-vip .text-slate-950,
+.theme-vip .text-slate-900,
+.theme-vip .text-slate-800,
+.theme-vip .text-slate-700,
+.theme-vip .text-slate-650,
+.theme-vip .text-slate-600,
+.theme-vip .text-gray-950,
+.theme-vip .text-gray-900,
+.theme-vip .text-gray-800,
+.theme-vip .text-gray-700,
+.theme-vip .text-gray-600,
+.theme-vip .text-zinc-900,
+.theme-vip .text-zinc-800,
+.theme-vip .text-zinc-700,
+.theme-vip .text-zinc-600,
+.theme-vip .text-stone-900,
+.theme-vip .text-stone-800,
+.theme-vip .text-stone-700,
+.theme-vip .text-stone-600,
+.theme-vip .text-emerald-950,
+.theme-vip .text-emerald-900,
+.theme-vip .text-emerald-800,
+.theme-vip .text-amber-950,
+.theme-vip .text-amber-900,
+.theme-vip .text-amber-800,
+.theme-vip .text-amber-700,
+.theme-vip .text-orange-950,
+.theme-vip .text-orange-900,
+.theme-vip .text-orange-850,
+.theme-vip .text-brand-dark,
+.theme-vip h1,
+.theme-vip h2,
+.theme-vip h3,
+.theme-vip h4,
+.theme-vip h5,
+.theme-vip h6 {
+  color: #FFFFFF !important; /* Pristine high-contrast white */
+}
+
+/* Beautiful gold accents for key metrics, ratings, prices, and emphasis */
+.theme-vip .text-amber-500,
+.theme-vip .text-amber-600,
+.theme-vip .text-emerald-500,
+.theme-vip .text-emerald-600,
+.theme-vip .text-indigo-600,
+.theme-vip .text-indigo-700,
+.theme-vip .font-extrabold {
+  color: #FCD34D !important; /* Beautiful pure gold color */
+}
+
+/* Styled subtitles, annotations, labels and descriptors with clear ivory/warm silver instead of dull bronze */
+.theme-vip .text-slate-500,
+.theme-vip .text-slate-400,
+.theme-vip .text-slate-450,
+.theme-vip .text-gray-500,
+.theme-vip .text-gray-400,
+.theme-vip .text-zinc-500,
+.theme-vip .text-zinc-400,
+.theme-vip .text-stone-500,
+.theme-vip .text-stone-400,
+.theme-vip .text-brand-light {
+  color: #E5E7EB !important; /* High-contrast light warm silver */
+}
+
+/* Beautiful golden-brass color for minor details and meta tags */
+.theme-vip .text-\[10px\],
+.theme-vip .text-\[11px\],
+.theme-vip .text-\[9px\] {
+  color: #D4AF37 !important; /* Golden brass meta details */
+}
+
+/* Beautiful gold-tinted borders and separators */
+.theme-vip .border-slate-100,
+.theme-vip .border-slate-150,
+.theme-vip .border-slate-200,
+.theme-vip .border-slate-300,
+.theme-vip .border-gray-100,
+.theme-vip .border-gray-200,
+.theme-vip .border-zinc-200,
+.theme-vip .border-stone-200,
+.theme-vip .border-amber-200,
+.theme-vip .border-orange-200,
+.theme-vip .border-emerald-200 {
+  border-color: rgba(212, 175, 55, 0.35) !important;
+}
+
+/* VIP inputs and controls */
+.theme-vip input,
+.theme-vip textarea,
+.theme-vip select {
+  background-color: #1A1A18 !important;
+  border: 1px solid #D4AF37 !important;
+  color: #FFFFFF !important;
+}
+
+.theme-vip input:focus,
+.theme-vip select:focus,
+.theme-vip textarea:focus {
+  border-color: #F59E0B !important;
+  outline: none !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important;
+}
+
+.theme-vip option {
+  background-color: #141412 !important;
+  color: #FFFFFF !important;
+}
+
+.theme-vip input::placeholder,
+.theme-vip textarea::placeholder {
+  color: #A38A5F !important;
+}
+
+/* Dashboard massive tiles: Exquisite Matte Obsidian cards with golden-brass borders */
+.theme-vip button[id^="tile_"] {
+  background: #141412 !important;
+  border: 2px solid rgba(212, 175, 55, 0.35) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+  color: #FFFFFF !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.theme-vip button[id^="tile_"]:hover {
+  background: #1E1E1B !important;
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.35), 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Icon container styling inside VIP tiles */
+.theme-vip button[id^="tile_"] div.bg-white\/20,
+.theme-vip button[id^="tile_"] .rounded-2xl {
+  background-color: rgba(212, 175, 55, 0.12) !important;
+  border: 1px solid rgba(212, 175, 55, 0.5) !important;
+}
+
+.theme-vip button[id^="tile_"] div.bg-white\/20 svg,
+.theme-vip button[id^="tile_"] .rounded-2xl svg {
+  color: #FCD34D !important;
+  stroke: #FCD34D !important;
+}
+
+/* Bold premium text inside tiles */
+.theme-vip button[id^="tile_"] span.font-bold,
+.theme-vip button[id^="tile_"] span.font-extrabold {
+  color: #FFFFFF !important;
+}
+
+.theme-vip button[id^="tile_"] span.text-white\/80,
+.theme-vip button[id^="tile_"] span.text-white\/85,
+.theme-vip button[id^="tile_"] span.text-slate-200,
+.theme-vip button[id^="tile_"] p {
+  color: #E5E7EB !important;
+}
+
+/* Shiny Authentic Noble 24k Gold Buttons */
+.theme-vip button.bg-brand-medium,
+.theme-vip .bg-brand-medium {
+  background: linear-gradient(135deg, #FFE8A3 0%, #F59E0B 50%, #B45309 100%) !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  border: 2px solid #FFFFFF !important;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.theme-vip button.bg-brand-medium *,
+.theme-vip .bg-brand-medium * {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+.theme-vip button.bg-brand-medium svg,
+.theme-vip .bg-brand-medium svg {
+  stroke: #000000 !important;
+  stroke-width: 2.5px;
+}
+
+/* ====================================================================
+   4. PRO THEME OVERRIDES (Аметистовое Небо - PRO)
+   ==================================================================== */
+.theme-pro .bg-white {
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+}
+
+.theme-pro .bg-white:hover {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+/* ====================================================================
+   5. PARTNER THEME OVERRIDES (Франшиза Устьяны - Партнер)
+   ==================================================================== */
+.theme-partner .bg-white {
+  border: 1px solid rgba(79, 70, 229, 0.15) !important;
+}
+
+.theme-partner .bg-white:hover {
+  border-color: rgba(79, 70, 229, 0.4) !important;
+}
+
+
+
+
